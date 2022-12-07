@@ -87,7 +87,7 @@ public class client extends JFrame{
                 label.setIcon(new ImageIcon(juliaJpegFile.getName()));
 
                 // gets the size of the image
-                Dimension size = label.getPreferredSize();
+                java.awt.Dimension size = label.getPreferredSize();
 
                 // sets the location of the image
                 label.setBounds(0, 0, size.width, size.height);
