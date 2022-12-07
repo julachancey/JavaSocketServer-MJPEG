@@ -83,7 +83,8 @@ public class client extends JFrame{
                 juliaJpegFile = (File) juliaServerResponse;
                 System.out.println(juliaJpegFile.getName());
 
-                // sets the image to be displayed as an icon
+                // clears container of any components and sets the image to be displayed as an icon
+                container.removeAll();
                 label.setIcon(new ImageIcon(juliaJpegFile.getName()));
 
                 // gets the size of the image
