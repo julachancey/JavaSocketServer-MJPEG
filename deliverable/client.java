@@ -29,7 +29,6 @@ public class client extends JFrame{
         // create resources for server connection
         Socket juliaSocket = new Socket(juliaHost.getHostName(), 4559);
         ObjectInputStream juliaInput = new ObjectInputStream(juliaSocket.getInputStream());
-        ObjectOutputStream juliaOutput = null;
 
         // read server intro message
         String juliaServerMessage = (String) juliaInput.readObject();
@@ -47,7 +46,7 @@ public class client extends JFrame{
         JFrame frame = new JFrame();
 
         // set default values for frame
-        frame.setTitle("Add Image");
+        frame.setTitle("MJPEG Programming Assignment");
         // terminates default flow layout
         frame.setLayout(null); 
         // terminates program on close button
@@ -57,23 +56,15 @@ public class client extends JFrame{
 
          // gets the content layer
         Container container = frame.getContentPane();
-        
 
         while (!exit) {
             // establish socket connection to server using port 4559 (last 4 digits of Julia
             // Chancey's ufid)
             juliaSocket = new Socket(juliaHost.getHostName(), 4559);
 
-            // write to socket using juliaOutput
-            juliaOutput = new ObjectOutputStream(juliaSocket.getOutputStream());
-
-            // receive user input using scanner object
-            String userInput = juliaScanner.nextLine();
-
-            juliaOutput.writeObject(userInput);
-
             // read server response message
-            juliaInput = new ObjectInputStream(juliaSocket.getInputStream());
+            ObjectInputStream juliaBuffer = new ObjectInputStream(juliaSocket.getInputStream());
+            juliaInput = juliaBuffer;
             var juliaServerResponse = juliaInput.readObject();
 
             JLabel label = new JLabel();
@@ -92,7 +83,7 @@ public class client extends JFrame{
 
                 // sets the location of the image
                 label.setBounds(0, 0, size.width, size.height);
-                frame.setBounds(100, 200, size.width, size.height);
+                frame.setBounds(0, 0, size.width, size.height);
 
                 // adds objects to the container and exhibits the frame
                 container.add(label);
@@ -101,17 +92,15 @@ public class client extends JFrame{
             } catch (Exception e) {
                 juliaServerMessage = (String) juliaServerResponse;
                 System.out.println(juliaServerMessage);
+                exit = true;
             }
 
             // close object streams
             juliaInput.close();
-            juliaOutput.close();
 
-            // have thread sleep for 100 milliseconds
-            Thread.sleep(100);
+            // have thread sleep for 1000 milliseconds
+            Thread.sleep(3000);
 
-            if (userInput.equals("bye"))
-                exit = true;
         }
         // close everything
         juliaSocket.close();

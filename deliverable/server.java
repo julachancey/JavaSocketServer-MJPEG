@@ -8,6 +8,7 @@ import java.io.ObjectOutputStream;
 import java.lang.ClassNotFoundException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.Vector;
 
 // java socket server implementation for CNT 4731 - Programming Assignment 2
 public class server {
@@ -34,54 +35,61 @@ public class server {
         juliaOutput.close();
 
         // image files to send to client
-        File juliaJpegImage1 = new File("image1.jpg");
-        File juliaJpegImage2 = new File("image2.jpg");
-        File juliaJpegImage3 = new File("image3.jpg");
+        File juliaJpegImage1 = new File("flower1.jpg");
+        File juliaJpegImage2 = new File("flower2.jpg");
+        File juliaJpegImage3 = new File("flower3.jpg");
+        File juliaJpegImage4 = new File("flower4.jpg");
+        File juliaJpegImage5 = new File("flower5.jpg");
+        File juliaJpegImage6 = new File("flower6.jpg");
+        File juliaJpegImage7 = new File("flower7.jpg");
+        File juliaJpegImage8 = new File("flower8.jpg");
+        File juliaJpegImage9 = new File("flower9.jpg");
+        File juliaJpegImage10 = new File("flower10.jpg");
+        File juliaJpegImage11 = new File("flower11.jpg");
+        File juliaJpegImage12 = new File("flower12.jpg");
+        File juliaJpegImage13 = new File("flower13.jpg");
+        File juliaJpegImage14 = new File("flower14.jpg");
+        File juliaJpegImage15 = new File("flower15.jpg");
+
+        Vector<File> vector = new Vector<File>(15);
+        vector.add(juliaJpegImage1);
+        vector.add(juliaJpegImage2);
+        vector.add(juliaJpegImage3);
+        vector.add(juliaJpegImage4);
+        vector.add(juliaJpegImage5);
+        vector.add(juliaJpegImage6);
+        vector.add(juliaJpegImage7);
+        vector.add(juliaJpegImage8);
+        vector.add(juliaJpegImage9);
+        vector.add(juliaJpegImage10);
+        vector.add(juliaJpegImage11);
+        vector.add(juliaJpegImage12);
+        vector.add(juliaJpegImage13);
+        vector.add(juliaJpegImage14);
+        vector.add(juliaJpegImage15);
+
+        int counter = 0;
 
         // server continues running until user types the command "bye"
         while (true) {
             // create socket and wait for client connection
             juliaSocket = juliaServer.accept();
 
-            // read from socket into juliaInput
-            ObjectInputStream juliaInput = new ObjectInputStream(juliaSocket.getInputStream());
-
-            // convert juliaInput that is a input stream object into a string
-            String juliaClientMessage = (String) juliaInput.readObject();
-
-            System.out.println(juliaClientMessage);
-
             // get output stream object
             juliaOutput = new ObjectOutputStream(juliaSocket.getOutputStream());
-
-            // switch statements for client message
-            switch (juliaClientMessage) {
-                case "JPEG 1":
-                    juliaOutput.writeObject(juliaJpegImage1);
-                    break;
-                case "JPEG 2":
-                    juliaOutput.writeObject(juliaJpegImage2);
-                    break;
-                case "JPEG 3":
-                    juliaOutput.writeObject(juliaJpegImage3);
-                    break;
-                case "bye":
-                    // send disconnected message to client to indicate termination and exit
-                    juliaOutput.writeObject("disconnected");
-                    break;
-                default:
-                    juliaOutput.writeObject("Error! Command not found.");
-                    break;
-            }
+            juliaOutput.writeObject(vector.get(counter));
+            counter++;
 
             // close everything
             juliaSocket.close();
-            juliaInput.close();
             juliaOutput.close();
 
-            // if user sends "bye" command, terminate the server and exit
-            if (juliaClientMessage.equals("bye"))
+            if (counter >= vector.size()){
+                juliaOutput.writeObject("disconnected");
+                juliaOutput.close();
                 break;
+            }
+
         }
 
         // close and terminate julia's server socket
